@@ -1,1 +1,16 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+  servlet:
+    context-path: /shop-mock-service
 
+external:
+  api:
+    shop-mock-service:
+      url: http://localhost:8080/products
+
+logging:
+  level:
+    root: INFO
+    com.example.shopmockservice: DEBUG
