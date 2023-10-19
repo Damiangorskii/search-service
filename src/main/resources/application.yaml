@@ -8,7 +8,7 @@ server:
 external:
   api:
     shop-mock-service:
-      url: http://localhost:8080/products
+      url: http://shop-mock-service:8080/products
 
 logging:
   level:
