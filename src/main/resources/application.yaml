@@ -10,6 +10,15 @@ external:
     shop-mock-service:
       url: http://shop-mock-service:8080/products
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    health:
+      show-details: always
+
 logging:
   level:
     root: INFO
