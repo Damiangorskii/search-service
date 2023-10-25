@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
   error:
     include-message: always
   servlet:
@@ -8,7 +8,7 @@ server:
 external:
   api:
     shop-mock-service:
-      url: http://shop-mock-service:8080/products
+      url: http://shop-mock-service:8081/products
 
 management:
   endpoints:

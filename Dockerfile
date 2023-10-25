@@ -8,6 +8,6 @@ LABEL maintainer="damian" \
 
 COPY target/search-service-0.0.1-SNAPSHOT.jar /app/search-service.jar
 
-EXPOSE 8081
+EXPOSE 8082
 
 CMD ["java", "-jar", "/app/search-service.jar"]
