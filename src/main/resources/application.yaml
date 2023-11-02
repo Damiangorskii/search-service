@@ -8,7 +8,7 @@ server:
 external:
   api:
     shop-mock-service:
-      url: http://shop-mock-service:8081/products
+      url: http://shop-mock-service:8082/products
 
 management:
   endpoints:
