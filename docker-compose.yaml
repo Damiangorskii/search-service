@@ -11,6 +11,17 @@ services:
     depends_on:
       - prometheus
 
+  shopping-service:
+    image: shopping-service:latest
+    container_name: shopping-service
+    ports:
+      - "8084:8084"
+    networks:
+      - monitoring_network
+    depends_on:
+      - prometheus
+      - mongodb
+
   shop-mock-service:
     image: shop-mock-service:latest
     container_name: shop-mock-service
