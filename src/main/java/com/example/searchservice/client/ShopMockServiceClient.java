@@ -11,6 +11,8 @@ import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+
 @Service
 public class ShopMockServiceClient {
 
@@ -26,6 +28,39 @@ public class ShopMockServiceClient {
     public Flux<ProductDTO> getAllProducts() {
         return webClient.get()
                 .uri(UriBuilder::build)
+                .retrieve()
+                .onStatus(HttpStatusCode::is5xxServerError, response ->
+                        Mono.error(new ExternalServiceUnavailableException("Shop-mock-service is currently unavailable")))
+                .onStatus(HttpStatusCode::is4xxClientError, response ->
+                        Mono.error(new InvalidExternalResponseException("Invalid response from shop-mock-service.")))
+                .bodyToFlux(ProductDTO.class);
+    }
+
+    public Flux<ProductDTO> getAllGameProducts() {
+        return webClient.get()
+                .uri(uri -> URI.create(config.getUrl() + "/external/games"))
+                .retrieve()
+                .onStatus(HttpStatusCode::is5xxServerError, response ->
+                        Mono.error(new ExternalServiceUnavailableException("Shop-mock-service is currently unavailable")))
+                .onStatus(HttpStatusCode::is4xxClientError, response ->
+                        Mono.error(new InvalidExternalResponseException("Invalid response from shop-mock-service.")))
+                .bodyToFlux(ProductDTO.class);
+    }
+
+    public Flux<ProductDTO> getAllHardwareProducts() {
+        return webClient.get()
+                .uri(uri -> URI.create(config.getUrl() + "/external/hardware"))
+                .retrieve()
+                .onStatus(HttpStatusCode::is5xxServerError, response ->
+                        Mono.error(new ExternalServiceUnavailableException("Shop-mock-service is currently unavailable")))
+                .onStatus(HttpStatusCode::is4xxClientError, response ->
+                        Mono.error(new InvalidExternalResponseException("Invalid response from shop-mock-service.")))
+                .bodyToFlux(ProductDTO.class);
+    }
+
+    public Flux<ProductDTO> getAllSoftwareToolProducts() {
+        return webClient.get()
+                .uri(uri -> URI.create(config.getUrl() + "/external/software-tools"))
                 .retrieve()
                 .onStatus(HttpStatusCode::is5xxServerError, response ->
                         Mono.error(new ExternalServiceUnavailableException("Shop-mock-service is currently unavailable")))

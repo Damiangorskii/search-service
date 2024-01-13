@@ -36,6 +36,17 @@ class SearchControllerTest {
     }
 
     @Test
+    void should_return_all_products_including_external() {
+        Product product = ProductDataProvider.getSimpleProduct();
+        when(searchService.getAllProductsWithExternalOnes()).thenReturn(Flux.just(product));
+
+        webTestClient.get().uri("/search/products/external")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Product.class).hasSize(1);
+    }
+
+    @Test
     void should_return_all_products() {
         Product product = ProductDataProvider.getSimpleProduct();
         when(searchService.getAllProducts()).thenReturn(Flux.just(product));

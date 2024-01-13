@@ -21,6 +21,17 @@ public class SearchService {
     private final ShopMockServiceClient shopMockServiceClient;
     private final ProductAdapter productAdapter;
 
+    public Flux<Product> getAllProductsWithExternalOnes() {
+        return Flux.merge(
+                        shopMockServiceClient.getAllProducts(),
+                        shopMockServiceClient.getAllGameProducts(),
+                        shopMockServiceClient.getAllHardwareProducts(),
+                        shopMockServiceClient.getAllSoftwareToolProducts()
+                )
+                .distinct()
+                .map(productAdapter::adaptToEntity);
+    }
+
     public Flux<Product> getAllProducts() {
         return shopMockServiceClient.getAllProducts()
                 .map(productAdapter::adaptToEntity);

@@ -37,6 +37,35 @@ class SearchServiceTest {
     }
 
     @Test
+    void should_get_all_products_including_external() {
+        ProductDTO productDTO = ProductDataProvider.getSimpleProductDTO();
+        Product product = ProductDataProvider.getSimpleProduct();
+
+        when(shopMockServiceClient.getAllProducts()).thenReturn(Flux.just(productDTO));
+        when(shopMockServiceClient.getAllGameProducts()).thenReturn(Flux.just(productDTO));
+        when(shopMockServiceClient.getAllSoftwareToolProducts()).thenReturn(Flux.just(productDTO));
+        when(shopMockServiceClient.getAllHardwareProducts()).thenReturn(Flux.just(productDTO));
+        when(productAdapter.adaptToEntity(productDTO)).thenReturn(product);
+
+        StepVerifier.create(searchService.getAllProductsWithExternalOnes())
+                .expectNext(product)
+                .verifyComplete();
+    }
+
+    @Test
+    void should_return_error_if_one_of_subsequent_products_return_error() {
+        ProductDTO productDTO = ProductDataProvider.getSimpleProductDTO();
+        when(shopMockServiceClient.getAllProducts()).thenReturn(Flux.error(new RuntimeException("Some error")));
+        when(shopMockServiceClient.getAllGameProducts()).thenReturn(Flux.just(productDTO));
+        when(shopMockServiceClient.getAllSoftwareToolProducts()).thenReturn(Flux.just(productDTO));
+        when(shopMockServiceClient.getAllHardwareProducts()).thenReturn(Flux.just(productDTO));
+
+        StepVerifier.create(searchService.getAllProductsWithExternalOnes())
+                .expectErrorMatches(err -> "Some error".equals(err.getMessage()))
+                .verify();
+    }
+
+    @Test
     void should_get_all_products() {
         ProductDTO productDTO = ProductDataProvider.getSimpleProductDTO();
         Product product = ProductDataProvider.getSimpleProduct();

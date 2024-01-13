@@ -7,12 +7,7 @@ import com.example.searchservice.service.SearchService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.math.BigDecimal;
@@ -24,6 +19,11 @@ import java.util.List;
 public class SearchController {
 
     private final SearchService searchService;
+
+    @GetMapping("external")
+    public Flux<Product> getAllProductsWithExternalOnes() {
+        return searchService.getAllProductsWithExternalOnes();
+    }
 
     @GetMapping
     public Flux<Product> getAllProducts() {
